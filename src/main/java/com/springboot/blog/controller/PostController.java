@@ -2,6 +2,7 @@ package com.springboot.blog.controller;
 
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.payload.PostDto;
+import com.springboot.blog.payload.PostResponse;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,13 @@ public class PostController {
 
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
-    @GetMapping("all")
-    public ResponseEntity<List<PostDto>> getAllPost(){
-        return  new ResponseEntity<>(postService.getAllPost(), HttpStatus.OK);
+    @GetMapping
+    public PostResponse getAllPosts(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+    @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+    @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ){
+        return  postService.getAllPosts(pageNo, pageSize, sortBy, sortDir);
     }
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getById(@PathVariable Long id){
